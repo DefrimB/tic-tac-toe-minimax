@@ -183,7 +183,39 @@ class occurence(game_class):
         else:
             return False
 
+    def minimax(self,state, depth, player):
+        """
+        AI function that choice the best move
+        :param state: current state of the board
+        :param depth: node index in the tree (0 <= depth <= 9),
+        but never nine in this case (see iaturn() function)
+        :param player: an human or a computer
+        :return: a list with [the best row, best col, best score]
+        """
+        if player == self.COMP:
+            best = [-1, -1, -infinity]
+        else:
+            best = [-1, -1, +infinity]
 
+        if depth == 0 or self.game_over(state):
+            score = self.evaluate(state)
+            return [-1, -1, score]
+
+        for cell in self.empty_cells(state):
+            x, y = cell[0], cell[1]
+            state[x][y] = player
+            score = self.minimax(state, depth - 1, -player)
+            state[x][y] = 0
+            score[0], score[1] = x, y
+
+            if player == self.COMP:
+                if score[2] > best[2]:
+                    best = score  # max value
+            else:
+                if score[2] < best[2]:
+                    best = score  # min value
+
+        return best
     def set_move(self,x, y, player):
         """
         Set the move on board, if the coordinates are valid
