@@ -257,76 +257,7 @@ class occurence(game_class):
             score = 0
 
         return score
-def main():
-    """
-    Main function that calls all functions
-    """
-    # Paul Lu.  Set the seed to get deterministic behaviour for each run.
-    #       Makes it easier for testing and tracing for understanding.
-    randomseed(274 + 2020)
-    video_game = occurence()
-    video_game._init_()
-    video_game.clean()
-    h_choice = ''  # X or O
-    c_choice = ''  # X or O
-    first = ''  # if human is the first
 
-    # Human chooses X or O to play
-    while h_choice != 'O' and h_choice != 'X':
-        try:
-            print('')
-            h_choice = input('Choose X or O\nChosen: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Setting computer's choice
-    if h_choice == 'X':
-        c_choice = 'O'
-    else:
-        c_choice = 'X'
-
-    # Human may starts first
-    video_game.clean()
-    while first != 'Y' and first != 'N':
-        try:
-            first = input('First to start?[y/n]: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Main loop of this game
-    while len(video_game.empty_cells(video_game.board)) > 0 and not video_game.game_over(video_game.board):
-        if first == 'N':
-            video_game.ai_turn(c_choice, h_choice)
-            first = ''
-
-        video_game.human_turn(c_choice, h_choice)
-        video_game.ai_turn(c_choice, h_choice)
-
-    # Game over message
-    if video_game.wins(video_game.board, video_game.HUMAN):
-        video_game.clean()
-        print(f'Human turn [{h_choice}]')
-        video_game.render(video_game.board, c_choice, h_choice)
-        print('YOU WIN!')
-    elif video_game.wins(video_game.board, video_game.COMP):
-        video_game.clean()
-        print(f'Computer turn [{c_choice}]')
-        video_game.render(video_game.board, c_choice, h_choice)
-        print('YOU LOSE!')
-    else:
-        video_game.clean()
-        video_game.render(video_game.board, c_choice, h_choice)
-        print('DRAW!')
-
-    exit()
-
-    pass
 if __name__ == '__main__':
     main()
     pass
