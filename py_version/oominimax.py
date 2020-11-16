@@ -84,6 +84,45 @@ class game_class():
                 symbol = chars[cell]
                 print(f'| {symbol} |', end='')
             print('\n' + str_line)
+class occurence(game_class):  
+    
+    def human_turn(self,c_choice, h_choice):
+        """
+        The Human plays choosing a valid move.
+        :param c_choice: computer's choice X or O
+        :param h_choice: human's choice X or O
+        :return:
+        """
+        depth = len(self.empty_cells(self.board))
+        if depth == 0 or self.game_over(self.board):
+            return
+
+        # Dictionary of valid moves
+        move = -1
+        moves = {
+            1: [0, 0], 2: [0, 1], 3: [0, 2],
+            4: [1, 0], 5: [1, 1], 6: [1, 2],
+            7: [2, 0], 8: [2, 1], 9: [2, 2],
+        }
+        
+        self.clean()
+        print(f'Human turn [{h_choice}]')
+        self.render(self.board, c_choice, h_choice)
+
+        while move < 1 or move > 9:
+            try:
+                move = int(input('Use numpad (1..9): '))
+                coord = moves[move]
+                can_move = self.set_move(coord[0], coord[1], self.HUMAN)
+
+                if not can_move:
+                    print('Bad move')
+                    move = -1
+            except (EOFError, KeyboardInterrupt):
+                print('Bye')
+                exit()
+            except (KeyError, ValueError):
+                print('Bad choice')
 
     def game_over(self,state):
             """
